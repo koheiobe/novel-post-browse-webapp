@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>firestore contents here</h1>
+    <h2>{{ loginUser.displayName }}</h2>
     <ul>
       <li v-for="(user, userIdx) in users" :key="userIdx">
         <ul>
@@ -29,18 +30,21 @@
 <script>
 import { mapGetters } from 'vuex'
 import { db } from '~/plugins/database.js'
+import auth from '~/plugins/auth.js'
 
 export default {
   data: function() {
     return {
       name: '',
-      email: ''
+      email: '',
+      loginUser: {}
     }
   },
   computed: {
     ...mapGetters({ users: 'getUsers' })
   },
-  created: function() {
+  created: async function() {
+    this.loginUser = await auth()
     this.$store.dispatch('setUsersRef', db.collection('users'))
   },
   methods: {
