@@ -63,11 +63,12 @@ export default {
       this.$router.push('login')
       return null
     }
-    if (user.email === '') {
+    if (user.email === '' || user.email === null) {
       this.setUser({
         name: 'Guest',
         email: ''
       })
+      return null
     }
     const userRef = db.collection('users').doc(user.email)
     const registerdUser = await userRef.get()
