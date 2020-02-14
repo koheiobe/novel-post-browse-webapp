@@ -2,7 +2,11 @@ import { firestoreAction } from 'vuexfire'
 
 export default {
   state: {
-    users: []
+    users: [],
+    user: {
+      name: '',
+      email: ''
+    }
   },
   actions: {
     setUsersRef: firestoreAction(({ bindFirestoreRef }, ref) => {
@@ -12,6 +16,14 @@ export default {
   getters: {
     getUsers: (state) => {
       return state.users
+    },
+    getLoginUser: (state) => {
+      return state.user
+    }
+  },
+  mutations: {
+    setUser(state, user) {
+      state.user = { ...user }
     }
   }
 }

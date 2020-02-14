@@ -1,7 +1,18 @@
 <template>
   <div>
+    <SampleNavBar />
+    <b-container class="bv-example-row">
+      <b-row>
+        <b-col>1 of 3</b-col>
+        <b-col>2 of 3</b-col>
+        <b-col>3 of 3</b-col>
+      </b-row>
+    </b-container>
+  </div>
+  <!-- <div>
+    <SampleNavBar />
     <h1>firestore contents here</h1>
-    <h2>{{ loginUser.displayName }}</h2>
+    <h2>{{ userName }}</h2>
     <ul>
       <li v-for="(user, userIdx) in users" :key="userIdx">
         <ul>
@@ -24,15 +35,19 @@
         <button @click="submit">Submit</button>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { db } from '~/plugins/database.js'
-import auth from '~/plugins/auth.js'
+import { getCurrentLoginUser } from '~/plugins/auth.js'
+import SampleNavBar from '~/components/SampleNavBar'
 
 export default {
+  components: {
+    SampleNavBar
+  },
   data: function() {
     return {
       name: '',
@@ -41,10 +56,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ users: 'getUsers' })
+    ...mapGetters({ users: 'getUsers' }),
+    userName: function() {
+      return this.loginUser.displayName || 'ゲスト'
+    }
   },
   created: async function() {
-    this.loginUser = await auth()
+    this.loginUser = await getCurrentLoginUser()
     this.$store.dispatch('setUsersRef', db.collection('users'))
   },
   methods: {
@@ -54,9 +72,8 @@ export default {
         email: this.email
       }
       const usersRef = db.collection('users')
-      usersRef.add(user)
+      usersRef.doc(this.email).set(user)
       this.name = ''
-      this.email = ''
     }
   }
 }
