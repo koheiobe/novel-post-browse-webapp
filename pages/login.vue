@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <div id="firebaseui-auth-container"></div>
+  <div :class="$style.container">
+    <div :class="$style.containerWrapper">
+      <h1 :class="$style.loginTitle">小説投稿&閲覧サイト</h1>
+      <div id="firebaseui-auth-container"></div>
+    </div>
   </div>
 </template>
 
@@ -25,3 +28,25 @@ export default {
   }
 }
 </script>
+
+<style module>
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background-color: #efefef;
+}
+.loginTitle {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+.containerWrapper {
+  padding: 12px;
+  border: 1px solid #afafaf;
+  border-radius: 5px;
+  margin-bottom: 33%;
+  background-color: white;
+}
+</style>
