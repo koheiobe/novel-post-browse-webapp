@@ -13,6 +13,7 @@ import firebase from '~/plugins/firebase'
 import 'firebaseui/dist/firebaseui.css'
 
 export default {
+  layout: 'login',
   mounted() {
     const uiConfig = {
       signInSuccessUrl: '/',

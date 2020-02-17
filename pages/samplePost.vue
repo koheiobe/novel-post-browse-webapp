@@ -1,14 +1,26 @@
 <template>
   <div>
-    <SamplePost />
+    <h1>title:{{ postDetail.title }}</h1>
+    <h2>content</h2>
+    <p>{{ postDetail.content }}</p>
+    <h2>author:{{ postDetail.author }}</h2>
+    <b-button @click="back()" variant="outline-primary">Back</b-button>
   </div>
 </template>
 
 <script>
-import SamplePost from '~/components/SamplePost'
+import { mapGetters } from 'vuex'
+
 export default {
-  components: {
-    SamplePost
+  computed: {
+    ...mapGetters({ postDetail: 'getPostDetail' })
+  },
+  methods: {
+    back: function() {
+      this.$router.push('samplePosts')
+    }
   }
 }
 </script>
+
+<style module></style>
