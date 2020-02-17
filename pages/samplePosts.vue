@@ -1,22 +1,22 @@
 <template>
   <div>
     <ul>
-      <li v-for="(post, postIdx) in posts" :key="postIdx">
+      <li v-for="(novel, novelIdx) in novels" :key="novelIdx">
         <div>
-          <ul :class="$style.postList">
-            <li>title: {{ post.title }}</li>
+          <ul :class="$style.novelList">
+            <li>title: {{ novel.title }}</li>
             <li>
-              <a @click="goToPostDetail(post)"
-                >description: {{ post.description }}</a
+              <a @click="goTonovelDetail(novel)"
+                >description: {{ novel.description }}</a
               >
             </li>
-            <li>email: {{ post.email }}</li>
-            <li>name: {{ post.name }}</li>
+            <li>email: {{ novel.email }}</li>
+            <li>author: {{ novel.author }}</li>
           </ul>
         </div>
       </li>
     </ul>
-    <nuxt-link to="sampleRegisterPost"
+    <nuxt-link to="registerNovel"
       ><b-button variant="outline-primary">小説を書く</b-button></nuxt-link
     >
   </div>
@@ -28,23 +28,23 @@ import { db } from '~/plugins/database.js'
 
 export default {
   computed: {
-    ...mapGetters({ posts: 'getPosts' })
+    ...mapGetters({ novels: 'getNovels' })
   },
   created: function() {
-    this.$store.dispatch('setPostsRef', db.collection('posts'))
+    this.$store.dispatch('setNovelsRef', db.collection('novels'))
   },
   methods: {
-    ...mapMutations({ setPostDetail: 'setPostDetail' }),
-    goToPostDetail: function(post) {
-      this.setPostDetail(post)
-      this.$router.push('samplePost')
+    ...mapMutations({ setNovelDetail: 'setNovelDetail' }),
+    goToNovelDetail: function(novels) {
+      this.setNovelDetail(novels)
+      this.$router.push('novel')
     }
   }
 }
 </script>
 
 <style module>
-ul.postList li {
+ul.novelList li {
   display: block;
   /* ここの幅は要調整 */
   width: 200px;
@@ -53,7 +53,7 @@ ul.postList li {
   text-overflow: ellipsis;
 }
 
-ul.postList li a {
+ul.novelList li a {
   color: blue;
   text-decoration: underline;
   cursor: pointer;

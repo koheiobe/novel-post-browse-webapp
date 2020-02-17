@@ -46,17 +46,17 @@ export default {
         this.errors.push('投稿するにはログインしてください。')
         return
       }
-      const postRef = db
-        .collection('posts')
+      const novelRef = db
+        .collection('novels')
         .doc(`${this.loginUser.email}-${this.title}`)
 
-      const post = await postRef.get()
+      const novel = await novelRef.get()
 
-      if (post.exists) {
+      if (novel.exists) {
         this.errors.push('すでに同名のタイトルが存在します。')
       } else {
         this.error = ''
-        postRef.set({
+        novelRef.set({
           email: this.loginUser.email,
           title: this.title,
           description: this.description,
