@@ -48,9 +48,9 @@ import { db } from '~/plugins/database.js'
 
 export default {
   computed: {
-    ...mapGetters({ user: 'getLoginUser' }),
+    ...mapGetters({ loginUser: 'getLoginUser' }),
     userName: function() {
-      return this.user.name
+      return this.loginUser.name
     }
   },
   created: function() {
@@ -64,7 +64,7 @@ export default {
       return null
     }
     if (user.email === '' || user.email === null) {
-      this.setUser({
+      this.setLoginUser({
         name: 'Guest',
         email: ''
       })
@@ -74,13 +74,13 @@ export default {
     const registerdUser = await userRef.get()
     // ログインしたユーザーがDBに登録されていなければ、登録する
     if (registerdUser.exists) {
-      this.setUser(registerdUser.data())
+      this.setLoginUser(registerdUser.data())
     } else {
       this.registerUser(user)
     }
   },
   methods: {
-    ...mapMutations({ setUser: 'setUser' }),
+    ...mapMutations({ setLoginUser: 'setLoginUser' }),
     logout: function() {
       auth.logout().then(this.$router.push('login'))
     },

@@ -3,7 +3,7 @@ import { firestoreAction } from 'vuexfire'
 export default {
   state: {
     users: [],
-    user: {
+    loginUser: {
       name: '',
       email: ''
     }
@@ -18,12 +18,12 @@ export default {
       return state.users
     },
     getLoginUser: (state) => {
-      return state.user
+      return state.loginUser
     }
   },
   mutations: {
-    setUser(state, user) {
-      state.user = { ...user }
+    setLoginUser(state, loginUser) {
+      state.loginUser = { ...loginUser }
     }
   }
 }
