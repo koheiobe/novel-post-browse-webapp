@@ -36,7 +36,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['@/assets/scss/custom.scss'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -60,6 +60,18 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/dotenv'
   ],
+  bootstrapVue: {
+    bootstrapCSS: false,
+    bootstrapVueCSS: false
+  },
+  module: {
+    rules: [
+      {
+        test: /\.s[ac]ss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
