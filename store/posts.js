@@ -13,10 +13,5 @@ export default {
     getPosts: (state) => {
       return state.posts
     }
-  },
-  mutations: {
-    setUser(state, user) {
-      state.user = { ...user }
-    }
   }
 }
