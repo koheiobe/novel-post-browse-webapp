@@ -93,6 +93,12 @@ ul.postList li {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+ul.postList li a {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
 .error {
   color: red;
 }
