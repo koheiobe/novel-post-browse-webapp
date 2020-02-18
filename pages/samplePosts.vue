@@ -16,9 +16,6 @@
         </div>
       </li>
     </ul>
-    <nuxt-link to="registerNovel"
-      ><b-button variant="outline-primary">小説を書く</b-button></nuxt-link
-    >
   </div>
 </template>
 

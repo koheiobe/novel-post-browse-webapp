@@ -8,23 +8,29 @@ import { db } from '~/plugins/database.js'
 
 export default {
   data: function() {
-    return {
-      title: '',
-      description: '',
-      errors: []
-    }
+    return {}
   },
   computed: {
     ...mapGetters({
-      loginUser: 'getLoginUser',
-      novels: 'getNovels'
+      editNovelId: 'getEditNovelId',
+      chapters: 'getChapters'
     }),
     loginUserNovels: function() {
       return this.novels.filter((novel) => novel.email === this.loginUser.email)
     }
   },
   created: function() {
-    this.$store.dispatch('setNovelsRef', db.collection('novels'))
+    if (this.editNovelId === '') {
+      this.$router.push('/novel/register')
+      return
+    }
+    this.$store.dispatch(
+      'setNovelChaptersRef',
+      db
+        .collection('novels')
+        .doc(this.editNovelId)
+        .collection('chapters')
+    )
   }
 }
 </script>

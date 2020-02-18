@@ -33,6 +33,7 @@
             </template>
             <!-- <b-dropdown-item href="#">Profile</b-dropdown-item> -->
             <b-dropdown-text>{{ userName }}</b-dropdown-text>
+            <b-dropdown-item @click="goToRegister">投稿</b-dropdown-item>
             <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
@@ -91,6 +92,9 @@ export default {
         name: user.displayName,
         email: user.email
       })
+    },
+    goToRegister: function() {
+      this.$router.push('/novel/register')
     }
   }
 }

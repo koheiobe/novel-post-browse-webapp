@@ -10,7 +10,7 @@
               <li>email: {{ novel.email }}</li>
               <li>author: {{ novel.author }}</li>
             </ul>
-            <b-button @click="goToEditNovel(novel)" variant="outline-primary"
+            <b-button @click="goToEdit(novel)" variant="outline-primary"
               >小説編集ページへ行く</b-button
             >
           </div>
@@ -98,9 +98,9 @@ export default {
       this.title = ''
       this.description = ''
     },
-    goToEditNovel: function(novel) {
+    goToEdit: function(novel) {
       this.$store.commit('setEditNovelId', `${novel.email}-${novel.title}`)
-      this.$router.push('editNovel')
+      this.$router.push('/novel/edit')
     }
   }
 }

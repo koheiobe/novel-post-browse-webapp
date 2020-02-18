@@ -3,6 +3,7 @@ import { firestoreAction } from 'vuexfire'
 export default {
   state: {
     novels: [],
+    chapters: [],
     novelDetail: {
       title: '',
       email: '',
@@ -14,6 +15,9 @@ export default {
   actions: {
     setNovelsRef: firestoreAction(({ bindFirestoreRef }, ref) => {
       bindFirestoreRef('novels', ref)
+    }),
+    setNovelChaptersRef: firestoreAction(({ bindFirestoreRef }, ref) => {
+      bindFirestoreRef('chapters', ref)
     })
   },
   getters: {
@@ -22,6 +26,12 @@ export default {
     },
     getNovelDetail: (state) => {
       return state.novelDetail
+    },
+    getEditNovelId: (state) => {
+      return state.editNovelId
+    },
+    getChapters: (state) => {
+      return state.chapters
     }
   },
   mutations: {
