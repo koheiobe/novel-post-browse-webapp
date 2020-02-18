@@ -8,7 +8,8 @@ export default {
       email: '',
       content: '',
       author: ''
-    }
+    },
+    editNovelId: ''
   },
   actions: {
     setNovelsRef: firestoreAction(({ bindFirestoreRef }, ref) => {
@@ -26,6 +27,9 @@ export default {
   mutations: {
     setNovelDetail(state, novelDetail) {
       state.novelDetail = { ...novelDetail }
+    },
+    setEditNovelId(state, id) {
+      state.editNovelId = id
     }
   }
 }
