@@ -61,7 +61,7 @@ export default {
     const user = await auth.getCurrentLoginUser()
     // ログインしてなかったらログイン画面へ
     if (!user) {
-      this.$router.push('login')
+      this.$router.push('/login')
       return null
     }
     if (user.email === '' || user.email === null) {

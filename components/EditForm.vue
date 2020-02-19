@@ -1,20 +1,38 @@
 <template>
   <div>
-    <EditForm />
+    <BIconChevronRight v-if="!isOpen" @click="toggleForm" />
+    <BIconChevronDown v-if="isOpen" @click="toggleForm" />
+    <div v-if="isOpen">
+      <div class="form">
+        <div>
+          title:
+          <input v-model="title" type="text" name="title" />
+        </div>
+        <div>
+          content:
+          <textarea v-model="content" name="content" rows="3" cols="30" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { BIconChevronDown, BIconChevronRight } from 'bootstrap-vue'
 import { mapGetters } from 'vuex'
-import EditForm from '~/components/EditForm'
 import { db } from '~/plugins/database.js'
 
 export default {
   components: {
-    EditForm
+    BIconChevronDown,
+    BIconChevronRight
   },
   data: function() {
-    return {}
+    return {
+      isOpen: false,
+      title: '',
+      content: ''
+    }
   },
   computed: {
     ...mapGetters({
@@ -37,6 +55,11 @@ export default {
         .doc(this.editNovelId)
         .collection('chapters')
     )
+  },
+  methods: {
+    toggleForm: function() {
+      this.isOpen = !this.isOpen
+    }
   }
 }
 </script>
