@@ -1,17 +1,42 @@
 <template>
   <div>
-    <BIconChevronRight v-if="!isOpen" @click="toggleForm" />
-    <BIconChevronDown v-if="isOpen" @click="toggleForm" />
+    <BIconChevronRight v-show="!isOpen" @click="toggleForm" />
+    <BIconChevronDown v-show="isOpen" @click="toggleForm" />
     <div v-if="isOpen">
       <div class="form">
         <div>
+          index:
+          <input
+            :value="index"
+            @change="onChangeForm('index', $event.target.value, chapterIdx)"
+            type="number"
+            name="index"
+          />
+        </div>
+        <div>
           title:
-          <input v-model="title" type="text" name="title" />
+          <input
+            :value="title"
+            @change="onChangeForm('title', $event.target.value, chapterIdx)"
+            type="text"
+            name="title"
+          />
         </div>
         <div>
           content:
-          <textarea v-model="content" name="content" rows="3" cols="30" />
+          <textarea
+            :value="content"
+            @change="onChangeForm('content', $event.target.value, chapterIdx)"
+            name="content"
+            rows="3"
+            cols="30"
+          />
         </div>
+      </div>
+      <div>
+        <b-button @click="onDelete(index)" variant="outline-primary"
+          >削除</b-button
+        >
       </div>
     </div>
   </div>
@@ -19,56 +44,47 @@
 
 <script>
 import { BIconChevronDown, BIconChevronRight } from 'bootstrap-vue'
-import { mapGetters } from 'vuex'
-import { db } from '~/plugins/database.js'
 
 export default {
   components: {
     BIconChevronDown,
     BIconChevronRight
   },
+  props: {
+    title: {
+      type: String,
+      default: ''
+    },
+    content: {
+      type: String,
+      default: ''
+    },
+    index: {
+      type: String,
+      default: null
+    },
+    chapterIdx: {
+      type: Number,
+      default: null
+    }
+  },
   data: function() {
     return {
-      isOpen: false,
-      title: '',
-      content: ''
+      isOpen: false
     }
-  },
-  computed: {
-    ...mapGetters({
-      editNovelId: 'getEditNovelId',
-      chapters: 'getChapters'
-    }),
-    loginUserNovels: function() {
-      return this.novels.filter((novel) => novel.email === this.loginUser.email)
-    }
-  },
-  created: function() {
-    if (this.editNovelId === '') {
-      this.$router.push('/novel/register')
-      return
-    }
-    this.$store.dispatch(
-      'setNovelChaptersRef',
-      db
-        .collection('novels')
-        .doc(this.editNovelId)
-        .collection('chapters')
-    )
   },
   methods: {
     toggleForm: function() {
       this.isOpen = !this.isOpen
+    },
+    onChangeForm: function(name, value, chapterIdx) {
+      this.$emit('onChangeForm', name, value, chapterIdx)
+    },
+    onDelete: function(index) {
+      this.$emit('onDelete', index)
     }
   }
 }
 </script>
 
-<style module>
-.novelList {
-  margin-bottom: 20px;
-}
-.error {
-  color: red;
-}
-</style>
+<style module></style>

@@ -40,6 +40,10 @@ export default {
     },
     setEditNovelId(state, id) {
       state.editNovelId = id
+    },
+    addChapter: (state, chapter) => {
+      if (state.chapters.length > 10) return
+      state.chapters.push(chapter)
     }
   }
 }

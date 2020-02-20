@@ -94,6 +94,10 @@ export default {
           createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
           updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss')
         })
+        novelRef
+          .collection('chapters')
+          .doc('1')
+          .set({ title: '', content: '' })
       }
       this.title = ''
       this.description = ''
