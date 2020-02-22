@@ -10,6 +10,7 @@
         :content="chapter.content"
         :index="String(chapter.index)"
         :chapterIdx="chapterIdx"
+        :chaptersCount="chapters.length"
         @onChangeForm="updateValue"
         @onDelete="onDelete"
       />
@@ -30,7 +31,7 @@
 import { BIconPlus } from 'bootstrap-vue'
 import { mapGetters, mapMutations } from 'vuex'
 import EditForm from '~/components/EditForm'
-import { db } from '~/plugins/database.js'
+import * as db from '~/plugins/database.js'
 
 export default {
   components: {
@@ -44,21 +45,15 @@ export default {
   },
   computed: {
     ...mapGetters({
-      editNovelId: 'getEditNovelId',
+      novelId: 'getEditNovelId',
       chapters: 'getChapters'
     }),
     loginUserNovels: function() {
       return this.novels.filter((novel) => novel.email === this.loginUser.email)
-    },
-    chaptersRef: function() {
-      return db
-        .collection('novels')
-        .doc(this.editNovelId)
-        .collection('chapters')
     }
   },
   created: function() {
-    if (this.editNovelId === '') {
+    if (this.novelId === '') {
       this.$router.push('/novel/register')
       return
     }
@@ -83,13 +78,8 @@ export default {
     },
     save: function() {
       this.error = ''
-      const hasSameIdx = this.chapters.some((chapter, idx) => {
-        const newChapters = this.chapters.slice(idx + 1)
-        return newChapters.some(
-          (m) => parseInt(chapter.index) === parseInt(m.index)
-        )
-      })
-      if (hasSameIdx) {
+
+      if (this.hasSameIdx()) {
         this.error =
           '同じindexが含まれています。indexはそれぞれ違う数字を指定してください。'
         return
@@ -106,15 +96,23 @@ export default {
       )
       // firestoreを更新
       sortedChapters.forEach((chapter) => {
-        this.chaptersRef.doc(String(chapter.index)).set(chapter)
+        db.setChapter(this.novelId, String(chapter.index), chapter)
       })
       this.syncFirestoreVuex()
     },
     onDelete: function(index) {
-      this.chaptersRef.doc(String(index)).delete()
+      db.deleteChapter(this.novelId, String(index))
     },
     syncFirestoreVuex: function() {
-      this.$store.dispatch('setNovelChaptersRef', this.chaptersRef)
+      this.$store.dispatch('setNovelChaptersRef', db.getChapters(this.novelId))
+    },
+    hasSameIdx: function() {
+      return this.chapters.some((chapter, idx) => {
+        const newChapters = this.chapters.slice(idx + 1)
+        return newChapters.some(
+          (m) => parseInt(chapter.index) === parseInt(m.index)
+        )
+      })
     }
   }
 }

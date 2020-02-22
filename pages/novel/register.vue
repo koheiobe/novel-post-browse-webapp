@@ -43,7 +43,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import dayjs from 'dayjs'
-import { db } from '~/plugins/database.js'
+import * as db from '~/plugins/database.js'
 
 export default {
   data: function() {
@@ -63,7 +63,7 @@ export default {
     }
   },
   created: function() {
-    this.$store.dispatch('setNovelsRef', db.collection('novels'))
+    this.$store.dispatch('setNovelsRef', db.getNovels())
   },
   methods: {
     submit: async function() {
@@ -76,9 +76,8 @@ export default {
         this.errors.push('小説の投稿数は３つまでです')
         return
       }
-      const novelRef = db
-        .collection('novels')
-        .doc(`${this.loginUser.email}-${this.title}`)
+      const novelId = `${this.loginUser.email}-${this.title}`
+      const novelRef = db.getNovel(novelId)
 
       const novel = await novelRef.get()
 
@@ -94,10 +93,7 @@ export default {
           createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
           updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss')
         })
-        novelRef
-          .collection('chapters')
-          .doc('1')
-          .set({ title: '', content: '' })
+        db.setChapter(novelId, 1, { title: '', content: '' })
       }
       this.title = ''
       this.description = ''

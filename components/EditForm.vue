@@ -9,8 +9,10 @@
           <input
             :value="index"
             @change="onChangeForm('index', $event.target.value, chapterIdx)"
+            :max="chaptersCount"
             type="number"
             name="index"
+            min="1"
           />
         </div>
         <div>
@@ -66,6 +68,10 @@ export default {
     chapterIdx: {
       type: Number,
       default: null
+    },
+    chaptersCount: {
+      type: Number,
+      default: 0
     }
   },
   data: function() {
