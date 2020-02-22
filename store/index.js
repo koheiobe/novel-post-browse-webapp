@@ -2,6 +2,7 @@ import { vuexfireMutations } from 'vuexfire'
 import Vuex from 'vuex'
 import users from './users'
 import novels from './novels'
+import chapters from './chapters'
 
 const createStore = () => {
   return new Vuex.Store({
@@ -10,7 +11,8 @@ const createStore = () => {
     },
     modules: {
       users,
-      novels
+      novels,
+      chapters
     }
   })
 }

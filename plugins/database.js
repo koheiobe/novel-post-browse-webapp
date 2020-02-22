@@ -2,6 +2,8 @@ import firebase from '~/plugins/firebase'
 
 export const db = firebase.firestore()
 
+// ※※※※※※ novelIdは ユーザーemail + - + novelタイトル ※※※※※※※
+
 // users
 export const getUsers = () => db.collection('users')
 // ユーザーの判定方法はemailを使用
@@ -13,16 +15,17 @@ export const getNovels = () => db.collection('novels')
 export const getNovel = (novelId) => db.collection('novels').doc(novelId)
 
 // Chapter
-export const getChapters = (novelId) =>
-  db
-    .collection('novels')
-    .doc(novelId)
-    .collection('chapters')
+export const getChapters = (novelId) => getNovel(novelId).collection('chapters')
+export const getChapter = (novelId, chapterIdx) =>
+  getChapters(novelId).doc(chapterIdx)
+
 export const setChapter = (novelId, chapterId, chapter) => {
-  const chaptersRef = getChapters(novelId)
-  chaptersRef.doc(chapterId).set(chapter)
+  getChapters(novelId)
+    .doc(chapterId)
+    .set(chapter)
 }
 export const deleteChapter = (novelId, chapterId) => {
-  const chaptersRef = getChapters(novelId)
-  chaptersRef.doc(chapterId).delete()
+  getChapters(novelId)
+    .doc(chapterId)
+    .delete()
 }

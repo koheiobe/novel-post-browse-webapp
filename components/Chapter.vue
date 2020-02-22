@@ -4,7 +4,6 @@
     <h2>content</h2>
     <p>{{ novelDetail.content }}</p>
     <h2>author:{{ novelDetail.author }}</h2>
-    <b-button @click="back()" variant="outline-primary">Back</b-button>
   </div>
 </template>
 
@@ -14,6 +13,9 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters({ novelDetail: 'getNovelDetail' })
+  },
+  created: function() {
+    this.$store.dispatch('setChaptersRef', this.chaptersRef)
   },
   methods: {
     back: function() {

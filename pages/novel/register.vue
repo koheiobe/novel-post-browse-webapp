@@ -100,7 +100,7 @@ export default {
     },
     goToEdit: function(novel) {
       this.$store.commit('setEditNovelId', `${novel.email}-${novel.title}`)
-      this.$router.push('/novel/edit')
+      this.$router.push('/novel/chapter/edit')
     }
   }
 }

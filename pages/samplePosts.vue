@@ -6,7 +6,7 @@
           <ul :class="$style.novelList">
             <li>title: {{ novel.title }}</li>
             <li>
-              <a @click="goTonovelDetail(novel)"
+              <a @click="goToNovelDetail(novel)"
                 >description: {{ novel.description }}</a
               >
             </li>
@@ -21,20 +21,20 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { db } from '~/plugins/database.js'
+import * as db from '~/plugins/database.js'
 
 export default {
   computed: {
     ...mapGetters({ novels: 'getNovels' })
   },
   created: function() {
-    this.$store.dispatch('setNovelsRef', db.collection('novels'))
+    this.$store.dispatch('setNovelsRef', db.getNovels())
   },
   methods: {
     ...mapMutations({ setNovelDetail: 'setNovelDetail' }),
     goToNovelDetail: function(novels) {
       this.setNovelDetail(novels)
-      this.$router.push('novel')
+      this.$router.push('/novel/detail')
     }
   }
 }

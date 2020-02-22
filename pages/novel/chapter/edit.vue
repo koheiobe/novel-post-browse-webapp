@@ -84,9 +84,18 @@ export default {
           '同じindexが含まれています。indexはそれぞれ違う数字を指定してください。'
         return
       }
+      const hasEmptyTitle = this.chapters.some(
+        (chapter) => chapter.title === ''
+      )
+      if (hasEmptyTitle) {
+        this.error = 'タイトルが空白の項目があります。'
+        return
+      }
 
-      const hasNullIdx = this.chapters.some((chapter) => chapter.index === null)
-      if (hasNullIdx) {
+      const hasEmptyIdx = this.chapters.some(
+        (chapter) => chapter.index === null
+      )
+      if (hasEmptyIdx) {
         this.error = 'indexが空の項目があります。'
         return
       }
@@ -104,7 +113,7 @@ export default {
       db.deleteChapter(this.novelId, String(index))
     },
     syncFirestoreVuex: function() {
-      this.$store.dispatch('setNovelChaptersRef', db.getChapters(this.novelId))
+      this.$store.dispatch('setChaptersRef', db.getChapters(this.novelId))
     },
     hasSameIdx: function() {
       return this.chapters.some((chapter, idx) => {

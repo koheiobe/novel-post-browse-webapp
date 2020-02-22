@@ -15,9 +15,6 @@ export default {
   actions: {
     setNovelsRef: firestoreAction(({ bindFirestoreRef }, ref) => {
       bindFirestoreRef('novels', ref)
-    }),
-    setNovelChaptersRef: firestoreAction(({ bindFirestoreRef }, ref) => {
-      bindFirestoreRef('chapters', ref)
     })
   },
   getters: {
@@ -29,9 +26,6 @@ export default {
     },
     getEditNovelId: (state) => {
       return state.editNovelId
-    },
-    getChapters: (state) => {
-      return state.chapters
     }
   },
   mutations: {
@@ -40,10 +34,6 @@ export default {
     },
     setEditNovelId(state, id) {
       state.editNovelId = id
-    },
-    addChapter: (state, chapter) => {
-      if (state.chapters.length > 10) return
-      state.chapters.push(chapter)
     }
   }
 }
