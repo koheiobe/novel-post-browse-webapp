@@ -37,7 +37,7 @@ export default {
   created: function() {
     this.$store.dispatch(
       'setChaptersRef',
-      db.getChapters(`${this.loginUser.email}-${this.novelDetail.title}`)
+      db.getChapters(`${this.novelDetail.email}-${this.novelDetail.title}`)
     )
   }
 }
