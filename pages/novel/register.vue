@@ -1,6 +1,7 @@
 <template>
   <div>
     <div>
+      <h2>投稿した小説一覧</h2>
       <ul>
         <li v-for="(novel, novelIdx) in loginUserNovels" :key="novelIdx">
           <div :class="$style.novelList">
@@ -18,13 +19,27 @@
       </ul>
     </div>
     <div class="form">
-      <div>
-        title:
-        <input v-model="title" type="text" name="title" />
+      <h2>小説を登録する</h2>
+      <div class="form-group">
+        <label for="exampleFormControlInput1">Title</label>
+        <input
+          v-model="title"
+          type="text"
+          name="title"
+          class="form-control"
+          placeholder="タイトルを入力"
+        />
       </div>
-      <div>
-        description:
-        <textarea v-model="description" name="description" rows="3" cols="30" />
+      <div class="form-group">
+        <label for="exampleFormControlTextarea1">Description</label>
+        <textarea
+          v-model="description"
+          class="form-control"
+          name="description"
+          rows="3"
+          cols="30"
+          placeholder="本文を入力"
+        />
       </div>
       <div>
         <button @click="submit">Submit</button>
@@ -42,7 +57,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import dayjs from 'dayjs'
 import * as db from '~/plugins/database.js'
 
 export default {
@@ -78,20 +92,16 @@ export default {
       }
       const novelId = `${this.loginUser.email}-${this.title}`
       const novelRef = db.getNovel(novelId)
-
       const novel = await novelRef.get()
 
       if (novel.exists) {
         this.errors.push('すでに同名のタイトルが存在します。')
       } else {
-        this.error = ''
-        novelRef.set({
+        db.setNovel(novelId, {
           email: this.loginUser.email,
           title: this.title,
           description: this.description,
-          author: this.loginUser.name,
-          createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-          updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss')
+          author: this.loginUser.name
         })
         db.setChapter(novelId, 1, { title: '', content: '' })
       }

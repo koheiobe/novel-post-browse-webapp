@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <h1>title:{{ novelDetail.title }}</h1>
-    <h2>content</h2>
-    <p>{{ novelDetail.content }}</p>
-    <h2>author:{{ novelDetail.author }}</h2>
+  <div class="card border-light mb-3">
+    <div class="card-header">
+      <h1>title:{{ novelDetail.title }}</h1>
+      <h2>content</h2>
+      <p>{{ novelDetail.content }}</p>
+      <h2>author:{{ novelDetail.author }}</h2>
+    </div>
     <h2>Chapters</h2>
     <div>
       <ul>
@@ -14,9 +16,9 @@
         </li>
       </ul>
     </div>
-    <b-button @click="back()" variant="outline-primary"
-      >小説一覧に戻る</b-button
-    >
+    <nuxt-link to="/">
+      <b-button variant="outline-primary">小説一覧に戻る</b-button>
+    </nuxt-link>
   </div>
 </template>
 
@@ -37,11 +39,6 @@ export default {
       'setChaptersRef',
       db.getChapters(`${this.loginUser.email}-${this.novelDetail.title}`)
     )
-  },
-  methods: {
-    back: function() {
-      this.$router.push('/samplePosts')
-    }
   }
 }
 </script>

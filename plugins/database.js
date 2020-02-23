@@ -12,7 +12,13 @@ export const setUser = (email, user) => getUser(email).set(user)
 
 // novels
 export const getNovels = () => db.collection('novels')
-export const getNovel = (novelId) => db.collection('novels').doc(novelId)
+export const getNovel = (novelId) => getNovels().doc(novelId)
+export const setNovel = (novelId, novel) =>
+  getNovel(novelId).set({
+    ...novel,
+    createdAt: db.Timestamp.fromDate(new Date()),
+    updatedAt: db.Timestamp.fromDate(new Date())
+  })
 
 // Chapter
 export const getChapters = (novelId) => getNovel(novelId).collection('chapters')
