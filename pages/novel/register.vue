@@ -1,6 +1,7 @@
 <template>
   <div>
     <div>
+      <h2>投稿した小説一覧</h2>
       <ul>
         <li v-for="(novel, novelIdx) in loginUserNovels" :key="novelIdx">
           <div :class="$style.novelList">
@@ -10,7 +11,7 @@
               <li>email: {{ novel.email }}</li>
               <li>author: {{ novel.author }}</li>
             </ul>
-            <b-button @click="goToEditNovel(novel)" variant="outline-primary"
+            <b-button @click="goToEdit(novel)" variant="outline-primary"
               >小説編集ページへ行く</b-button
             >
           </div>
@@ -18,13 +19,27 @@
       </ul>
     </div>
     <div class="form">
-      <div>
-        title:
-        <input v-model="title" type="text" name="title" />
+      <h2>小説を登録する</h2>
+      <div class="form-group">
+        <label for="exampleFormControlInput1">Title</label>
+        <input
+          v-model="title"
+          type="text"
+          name="title"
+          class="form-control"
+          placeholder="タイトルを入力"
+        />
       </div>
-      <div>
-        description:
-        <textarea v-model="description" name="description" rows="3" cols="30" />
+      <div class="form-group">
+        <label for="exampleFormControlTextarea1">Description</label>
+        <textarea
+          v-model="description"
+          class="form-control"
+          name="description"
+          rows="3"
+          cols="30"
+          placeholder="本文を入力"
+        />
       </div>
       <div>
         <button @click="submit">Submit</button>
@@ -42,8 +57,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import dayjs from 'dayjs'
-import { db } from '~/plugins/database.js'
+import * as db from '~/plugins/database.js'
 
 export default {
   data: function() {
@@ -63,7 +77,7 @@ export default {
     }
   },
   created: function() {
-    this.$store.dispatch('setNovelsRef', db.collection('novels'))
+    this.$store.dispatch('setNovelsRef', db.getNovels())
   },
   methods: {
     submit: async function() {
@@ -76,31 +90,27 @@ export default {
         this.errors.push('小説の投稿数は３つまでです')
         return
       }
-      const novelRef = db
-        .collection('novels')
-        .doc(`${this.loginUser.email}-${this.title}`)
-
+      const novelId = `${this.loginUser.email}-${this.title}`
+      const novelRef = db.getNovel(novelId)
       const novel = await novelRef.get()
 
       if (novel.exists) {
         this.errors.push('すでに同名のタイトルが存在します。')
       } else {
-        this.error = ''
-        novelRef.set({
+        db.setNovel(novelId, {
           email: this.loginUser.email,
           title: this.title,
           description: this.description,
-          author: this.loginUser.name,
-          createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-          updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss')
+          author: this.loginUser.name
         })
+        db.setChapter(novelId, 1, { title: '', content: '' })
       }
       this.title = ''
       this.description = ''
     },
-    goToEditNovel: function(novel) {
+    goToEdit: function(novel) {
       this.$store.commit('setEditNovelId', `${novel.email}-${novel.title}`)
-      this.$router.push('editNovel')
+      this.$router.push('/novel/chapter/edit')
     }
   }
 }

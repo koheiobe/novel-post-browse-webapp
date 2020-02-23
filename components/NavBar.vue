@@ -1,7 +1,11 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info">
-      <b-navbar-brand>novel post & browse site</b-navbar-brand>
+      <b-navbar-brand
+        ><nuxt-link :class="$style.title" to="/"
+          >novel post & browse site</nuxt-link
+        ></b-navbar-brand
+      >
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -33,6 +37,7 @@
             </template>
             <!-- <b-dropdown-item href="#">Profile</b-dropdown-item> -->
             <b-dropdown-text>{{ userName }}</b-dropdown-text>
+            <b-dropdown-item @click="goToRegister">投稿</b-dropdown-item>
             <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
@@ -44,7 +49,7 @@
 <script>
 import { mapMutations, mapGetters } from 'vuex'
 import * as auth from '~/plugins/auth'
-import { db } from '~/plugins/database.js'
+import * as db from '~/plugins/database.js'
 
 export default {
   computed: {
@@ -54,15 +59,16 @@ export default {
     }
   },
   created: function() {
-    this.$store.dispatch('setUsersRef', db.collection('users'))
+    this.syncFirestoreVuex()
   },
   async mounted() {
     const user = await auth.getCurrentLoginUser()
     // ログインしてなかったらログイン画面へ
     if (!user) {
-      this.$router.push('login')
+      this.logout()
       return null
     }
+    // ユーザーemailが存在しなければゲストとして一時的にログインさせる
     if (user.email === '' || user.email === null) {
       this.setLoginUser({
         name: 'Guest',
@@ -70,7 +76,7 @@ export default {
       })
       return null
     }
-    const userRef = db.collection('users').doc(user.email)
+    const userRef = db.getUser(user.email)
     const registerdUser = await userRef.get()
     // ログインしたユーザーがDBに登録されていなければ、登録する
     if (registerdUser.exists) {
@@ -82,18 +88,23 @@ export default {
   methods: {
     ...mapMutations({ setLoginUser: 'setLoginUser' }),
     logout: function() {
-      auth.logout().then(this.$router.push('login'))
+      auth.logout().then(this.$router.push('/login'))
     },
     registerUser: function(user) {
-      const usersCollection = db.collection('users')
-      // ユーザーの判定方法はemailを使用
-      usersCollection.doc(user.email).set({
-        name: user.displayName,
-        email: user.email
-      })
+      db.setUser(user.email, user)
+    },
+    goToRegister: function() {
+      this.$router.push('/novel/register')
+    },
+    syncFirestoreVuex: function() {
+      this.$store.dispatch('setUsersRef', db.getUsers())
     }
   }
 }
 </script>
 
-<style module></style>
+<style module>
+.title {
+  color: white;
+}
+</style>
