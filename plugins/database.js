@@ -16,9 +16,14 @@ export const getNovel = (novelId) => getNovels().doc(novelId)
 export const setNovel = (novelId, novel) =>
   getNovel(novelId).set({
     ...novel,
-    createdAt: db.Timestamp.fromDate(new Date()),
-    updatedAt: db.Timestamp.fromDate(new Date())
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+    updatedAt: firebase.firestore.Timestamp.fromDate(new Date())
   })
+export const updateNoveUpdatedAtl = (novelId) => {
+  getNovel(novelId).update({
+    updatedAt: firebase.firestore.Timestamp.fromDate(new Date())
+  })
+}
 
 // Chapter
 export const getChapters = (novelId) => getNovel(novelId).collection('chapters')

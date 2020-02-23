@@ -107,6 +107,8 @@ export default {
       sortedChapters.forEach((chapter) => {
         db.setChapter(this.novelId, String(chapter.index), chapter)
       })
+      // 小説の更新時刻を更新する
+      db.updateNoveUpdatedAtl(this.novelId)
       this.syncFirestoreVuex()
     },
     onDelete: function(index) {
