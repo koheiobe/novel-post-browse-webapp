@@ -18,12 +18,13 @@
     <div :class="$style.addChapterButtonContainer">
       <BIconPlus @click="addEmptyChapter" />
     </div>
-    <div>
-      <b-button @click="save()" variant="outline-primary">保存</b-button>
-    </div>
     <div v-if="error !== ''">
       <p>{{ error }}</p>
     </div>
+    <div>
+      <b-button @click="save()" variant="outline-primary">保存</b-button>
+    </div>
+    <b-button to="/novel/register" variant="outline-primary">戻る</b-button>
   </div>
 </template>
 

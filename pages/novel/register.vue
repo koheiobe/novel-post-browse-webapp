@@ -11,6 +11,9 @@
               <li>email: {{ novel.email }}</li>
               <li>author: {{ novel.author }}</li>
             </ul>
+            <b-button @click="deleteNovel(novel)" variant="danger"
+              >削除する</b-button
+            >
             <b-button @click="goToEdit(novel)" variant="outline-primary"
               >小説編集ページへ行く</b-button
             >
@@ -86,11 +89,12 @@ export default {
         this.errors.push('投稿するにはログインしてください。')
         return
       }
-      if (this.loginUserNovels.length >= 3) {
-        this.errors.push('小説の投稿数は３つまでです')
-        return
-      }
+      // if (this.loginUserNovels.length >= 3) {
+      //   this.errors.push('小説の投稿数は３つまでです')
+      //   return
+      // }
       const novelId = `${this.loginUser.email}-${this.title}`
+      console.log(novelId)
       const novelRef = db.getNovel(novelId)
       const novel = await novelRef.get()
 
@@ -103,10 +107,13 @@ export default {
           description: this.description,
           author: this.loginUser.name
         })
-        db.setChapter(novelId, 1, { title: '', content: '' })
+        db.setChapter(novelId, '1', { title: '', content: '' })
       }
       this.title = ''
       this.description = ''
+    },
+    deleteNovel: function(novel) {
+      db.deleteNovel(`${this.loginUser.email}-${novel.title}`)
     },
     goToEdit: function(novel) {
       this.$store.commit('setEditNovelId', `${novel.email}-${novel.title}`)

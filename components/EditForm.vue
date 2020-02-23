@@ -36,9 +36,7 @@
         </div>
       </div>
       <div>
-        <b-button @click="onDelete(index)" variant="outline-primary"
-          >削除</b-button
-        >
+        <b-button @click="onDelete(index)" variant="danger">削除</b-button>
       </div>
     </div>
   </div>

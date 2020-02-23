@@ -24,6 +24,9 @@ export const updateNoveUpdatedAtl = (novelId) => {
     updatedAt: firebase.firestore.Timestamp.fromDate(new Date())
   })
 }
+export const deleteNovel = (novelId) => {
+  getNovel(novelId).delete()
+}
 
 // Chapter
 export const getChapters = (novelId) => getNovel(novelId).collection('chapters')
