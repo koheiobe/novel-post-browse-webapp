@@ -89,12 +89,12 @@ export default {
         this.errors.push('投稿するにはログインしてください。')
         return
       }
+      // TODO 一時的にコメントアウト
       // if (this.loginUserNovels.length >= 3) {
       //   this.errors.push('小説の投稿数は３つまでです')
       //   return
       // }
       const novelId = `${this.loginUser.email}-${this.title}`
-      console.log(novelId)
       const novelRef = db.getNovel(novelId)
       const novel = await novelRef.get()
 

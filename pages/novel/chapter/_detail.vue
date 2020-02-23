@@ -2,7 +2,7 @@
   <div v-if="chapter !== null">
     <h1>title:{{ chapter.title }}</h1>
     <h2>content</h2>
-    <p>{{ chapter.content }}</p>
+    <div :class="$style.contentArea">{{ chapter.content }}</div>
     <b-button @click="back()" variant="outline-primary"
       >Chapter一覧に戻る</b-button
     >
@@ -38,4 +38,9 @@ export default {
 }
 </script>
 
-<style module></style>
+<style module>
+.contentArea {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+</style>
