@@ -13,6 +13,19 @@
         </li>
       </ul>
     </nav>
+    <template>
+      <div>
+        <b-form-select
+          v-model="selected"
+          :options="options"
+          @change="onChangeSelect"
+        >
+        </b-form-select>
+        <div class="mt-3">
+          Selected: <strong>{{ selected }}</strong>
+        </div>
+      </div>
+    </template>
     <!-- 小説一覧 -->
     <table class="table table-striped">
       <thead>
@@ -24,13 +37,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(post, postIdx) in posts" :key="postIdx">
-          <td>{{ postIdx + 1 }}</td>
-          <td>{{ post.title }}</td>
+        <tr v-for="(novel, novelIdx) in novels" :key="novelIdx">
+          <td>{{ novelIdx + 1 }}</td>
+          <td>{{ novel.title }}</td>
           <td class="description">
-            <a v-on:click="goToDetail(post)">{{ post.description }}</a>
+            <a v-on:click="goToDetail(novel)">{{ novel.description }}</a>
           </td>
-          <td>{{ post.author }}</td>
+          <td>{{ novel.author }}</td>
         </tr>
       </tbody>
     </table>
@@ -44,17 +57,44 @@
 import { mapGetters, mapMutations } from 'vuex'
 import * as db from '~/plugins/database.js'
 export default {
+  data: function() {
+    return {
+      selected: null,
+      options: [
+        { value: null, text: '選択', disabled: true },
+        { value: 'newer', text: '新しい順' },
+        { value: 'older', text: '古い順' },
+        { value: 'author', text: '著者' }
+      ]
+    }
+  },
   computed: {
-    ...mapGetters({ users: 'getUsers', posts: 'getNovels' })
+    ...mapGetters({ users: 'getUsers', novels: 'getNovels' })
   },
   created: function() {
     this.$store.dispatch('setNovelsRef', db.getNovels())
   },
   methods: {
     ...mapMutations({ setNovelDetail: 'setNovelDetail' }),
-    goToDetail: function(post) {
-      this.setNovelDetail(post)
+    goToDetail: function(novel) {
+      this.setNovelDetail(novel)
       this.$router.push('/novel/detail')
+    },
+    onChangeSelect: function(value) {
+      switch (value) {
+        case 'newer':
+          this.novels.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
+          break
+        case 'older':
+          this.novels.sort((a, b) => a.createdAt.seconds - b.createdAt.seconds)
+          break
+        // TODO 挙動未確認
+        case 'author':
+          this.novels.sort((a, b) =>
+            a.author > b.author ? 1 : b.author < a.author ? -1 : 0
+          )
+          break
+      }
     }
   }
 }
