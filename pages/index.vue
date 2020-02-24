@@ -1,31 +1,14 @@
 <template>
   <div>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-end">
-        <li class="page-item disabled">
-          <a class="page-link" href="#" tabindex="-1">Previous</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">Next</a>
-        </li>
-      </ul>
-    </nav>
-    <template>
-      <div>
-        <b-form-select
-          v-model="selected"
-          :options="options"
-          @change="onChangeSelect"
-        >
-        </b-form-select>
-        <div class="mt-3">
-          Selected: <strong>{{ selected }}</strong>
-        </div>
-      </div>
-    </template>
+    <div :class="$style.tableHeader">
+      <b-form-select
+        :class="$style.selectbox"
+        v-model="selected"
+        :options="options"
+        @change="onChangeSelect"
+      >
+      </b-form-select>
+    </div>
     <!-- 小説一覧 -->
     <table class="table table-striped">
       <thead>
@@ -39,9 +22,11 @@
       <tbody>
         <tr v-for="(novel, novelIdx) in novels" :key="novelIdx">
           <td>{{ novelIdx + 1 }}</td>
-          <td>{{ novel.title }}</td>
-          <td class="description">
-            <a v-on:click="goToDetail(novel)">{{ novel.description }}</a>
+          <td :class="$style.title">
+            <a v-on:click="goToDetail(novel)">{{ novel.title }}</a>
+          </td>
+          <td>
+            {{ novel.description }}
           </td>
           <td>{{ novel.author }}</td>
         </tr>
@@ -100,4 +85,18 @@ export default {
 }
 </script>
 
-<style></style>
+<style module>
+.tableHeader {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+.selectbox {
+  width: 200px;
+}
+.title a {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+</style>

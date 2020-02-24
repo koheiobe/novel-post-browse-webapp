@@ -1,58 +1,77 @@
 <template>
   <div>
-    <div>
-      <h2>投稿した小説一覧</h2>
-      <ul>
-        <li v-for="(novel, novelIdx) in loginUserNovels" :key="novelIdx">
-          <div :class="$style.novelList">
-            <ul>
-              <li>title: {{ novel.title }}</li>
-              <li>description: {{ novel.description }}</li>
-              <li>email: {{ novel.email }}</li>
-              <li>author: {{ novel.author }}</li>
-            </ul>
-            <b-button @click="deleteNovel(novel)" variant="danger"
-              >削除する</b-button
-            >
-            <b-button @click="goToEdit(novel)" variant="outline-primary"
-              >小説編集ページへ行く</b-button
-            >
-          </div>
-        </li>
-      </ul>
+    <h2>投稿した小説一覧</h2>
+    <div :class="$style.tableContainer">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Title</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(novel, novelIdx) in loginUserNovels" :key="novelIdx">
+            <td>
+              <a>{{ novel.title }}</a>
+            </td>
+            <td>
+              {{ novel.description }}
+            </td>
+            <td>
+              <b-button
+                :class="$style.button"
+                @click="goToEdit(novel)"
+                variant="outline-primary"
+                >小説編集ページへ行く</b-button
+              >
+            </td>
+            <td>
+              <b-button
+                :class="$style.button"
+                @click="deleteNovel(novel)"
+                variant="danger"
+                >削除する</b-button
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="form">
       <h2>小説を登録する</h2>
-      <div class="form-group">
-        <label for="exampleFormControlInput1">Title</label>
-        <input
-          v-model="title"
-          type="text"
-          name="title"
-          class="form-control"
-          placeholder="タイトルを入力"
-        />
-      </div>
-      <div class="form-group">
-        <label for="exampleFormControlTextarea1">Description</label>
-        <textarea
-          v-model="description"
-          class="form-control"
-          name="description"
-          rows="3"
-          cols="30"
-          placeholder="本文を入力"
-        />
-      </div>
-      <div>
-        <button @click="submit">Submit</button>
-      </div>
-      <div v-if="errors.length !== 0">
-        <template v-for="(error, errorIdx) in errors">
-          <p v-if="error !== ''" :class="$style.error" :key="errorIdx">
-            {{ error }}
-          </p>
-        </template>
+
+      <div :class="$style.formContainer">
+        <div class="form-group">
+          <label for="title">タイトル</label>
+          <input
+            v-model="title"
+            type="text"
+            name="title"
+            class="form-control"
+            placeholder="タイトルを入力"
+          />
+          <label for="description">説明</label>
+          <textarea
+            v-model="description"
+            class="form-control"
+            name="description"
+            rows="3"
+            cols="30"
+            placeholder="本文を入力"
+          />
+        </div>
+        <div>
+          <b-button @cick="submit" variant="primary">登録する</b-button>
+        </div>
+        <div v-if="errors.length !== 0">
+          <template v-for="(error, errorIdx) in errors">
+            <p v-if="error !== ''" :class="$style.error" :key="errorIdx">
+              {{ error }}
+            </p>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -129,5 +148,15 @@ export default {
 }
 .error {
   color: red;
+}
+.button {
+  width: 200px;
+}
+.tableContainer {
+  margin-bottom: 40px;
+}
+.formContainer {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 16px;
 }
 </style>

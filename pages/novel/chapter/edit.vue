@@ -6,6 +6,7 @@
       :key="chapterIdx"
     >
       <EditForm
+        :defaultIsOpen="defaultIsOpen(chapterIdx)"
         :title="chapter.title"
         :content="chapter.content"
         :index="String(chapter.index)"
@@ -15,16 +16,18 @@
         @onDelete="onDelete"
       />
     </div>
-    <div :class="$style.addChapterButtonContainer">
-      <BIconPlus @click="addEmptyChapter" />
-    </div>
     <div v-if="error !== ''">
       <p>{{ error }}</p>
     </div>
-    <div>
-      <b-button @click="save()" variant="outline-primary">保存</b-button>
+    <div :class="$style.addChapterButtonContainer">
+      <b-button @click="addEmptyChapter" variant="primary"
+        >追加<BIconPlus
+      /></b-button>
     </div>
-    <b-button to="/novel/register" variant="outline-primary">戻る</b-button>
+    <div :class="$style.footer">
+      <b-button @click="save()" variant="outline-primary">保存</b-button>
+      <b-button to="/novel/register" variant="outline-primary">戻る</b-button>
+    </div>
   </div>
 </template>
 
@@ -125,16 +128,29 @@ export default {
           (m) => parseInt(chapter.index) === parseInt(m.index)
         )
       })
+    },
+    defaultIsOpen: function(chapterIdx) {
+      return chapterIdx === 0
     }
   }
 }
 </script>
 
-<style module>
+<style module lang="scss">
 .editArea {
   margin-bottom: 20px;
+  background-color: #f9f9f9;
 }
 .addChapterButtonContainer {
-  margin-bottom: 20px;
+  color: blue;
+  margin-bottom: 40px;
+}
+
+.footer {
+  display: flex;
+
+  button:first-child {
+    margin-right: 16px;
+  }
 }
 </style>

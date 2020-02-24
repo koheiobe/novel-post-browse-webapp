@@ -1,41 +1,53 @@
 <template>
   <div>
-    <BIconChevronRight v-show="!isOpen" @click="toggleForm" />
-    <BIconChevronDown v-show="isOpen" @click="toggleForm" />
+    <BIconChevronRight
+      v-show="!isOpen"
+      @click="toggleForm"
+      :class="$style.clickable"
+    />
+    <BIconChevronDown
+      v-show="isOpen"
+      @click="toggleForm"
+      :class="$style.clickable"
+    />
     <div v-if="isOpen">
-      <div class="form">
-        <div>
-          index:
-          <input
+      <div :class="['form-group', $style.formContainer]">
+        <div :class="$style.inputContainer">
+          <label for="index">章番号</label>
+          <b-form-input
             :value="index"
-            @change="onChangeForm('index', $event.target.value, chapterIdx)"
             :max="chaptersCount"
+            :class="$style.chapterIndexInput"
+            @change="onChangeForm('index', value, chapterIdx)"
             type="number"
             name="index"
             min="1"
+            class="form-control"
+            placeholder="他の章と違う番号を割り当ててください。"
           />
         </div>
-        <div>
-          title:
-          <input
+        <div :class="$style.inputContainer">
+          <label for="title">タイトル</label>
+          <b-form-input
             :value="title"
-            @change="onChangeForm('title', $event.target.value, chapterIdx)"
+            @change="onChangeForm('title', value, chapterIdx)"
+            class="form-control"
             type="text"
             name="title"
+            placeholder="タイトルを入力"
           />
         </div>
-        <div>
-          content:
-          <textarea
+        <div :class="$style.inputContainer">
+          <label for="content">本文</label>
+          <b-form-textarea
             :value="content"
-            @change="onChangeForm('content', $event.target.value, chapterIdx)"
+            @change="onChangeForm('content', value, chapterIdx)"
+            class="form-control"
             name="content"
-            rows="3"
-            cols="30"
+            rows="10"
+            cols="50"
           />
         </div>
-      </div>
-      <div>
         <b-button @click="onDelete(index)" variant="danger">削除</b-button>
       </div>
     </div>
@@ -70,12 +82,19 @@ export default {
     chaptersCount: {
       type: Number,
       default: 0
+    },
+    defaultIsOpen: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
     return {
       isOpen: false
     }
+  },
+  created: function() {
+    this.isOpen = this.defaultIsOpen
   },
   methods: {
     toggleForm: function() {
@@ -91,4 +110,30 @@ export default {
 }
 </script>
 
-<style module></style>
+<style module lang="scss">
+.clickable {
+  cursor: pointer;
+}
+.formContainer {
+  background-color: #f9f9f9;
+  padding: 16px;
+}
+.inputContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  input,
+  textarea {
+    max-width: 850px;
+  }
+}
+
+.chapterIndexInput {
+  width: 200px;
+}
+
+.inputContainer label:first-child {
+  margin-right: 16px;
+  min-width: 100px;
+}
+</style>
