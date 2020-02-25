@@ -63,7 +63,7 @@
           />
         </div>
         <div>
-          <b-button @cick="submit" variant="primary">登録する</b-button>
+          <b-button @click="submit" variant="primary">登録する</b-button>
         </div>
         <div v-if="errors.length !== 0">
           <template v-for="(error, errorIdx) in errors">
@@ -116,7 +116,6 @@ export default {
       const novelId = `${this.loginUser.email}-${this.title}`
       const novelRef = db.getNovel(novelId)
       const novel = await novelRef.get()
-
       if (novel.exists) {
         this.errors.push('すでに同名のタイトルが存在します。')
       } else {

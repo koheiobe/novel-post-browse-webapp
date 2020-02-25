@@ -14,11 +14,11 @@
       <div :class="['form-group', $style.formContainer]">
         <div :class="$style.inputContainer">
           <label for="index">章番号</label>
-          <b-form-input
+          <input
             :value="index"
             :max="chaptersCount"
             :class="$style.chapterIndexInput"
-            @change="onChangeForm('index', value, chapterIdx)"
+            @change="onChangeForm('index', $event.target.value, chapterIdx)"
             type="number"
             name="index"
             min="1"
@@ -28,9 +28,9 @@
         </div>
         <div :class="$style.inputContainer">
           <label for="title">タイトル</label>
-          <b-form-input
+          <input
             :value="title"
-            @change="onChangeForm('title', value, chapterIdx)"
+            @change="onChangeForm('title', $event.target.value, chapterIdx)"
             class="form-control"
             type="text"
             name="title"
@@ -39,9 +39,9 @@
         </div>
         <div :class="$style.inputContainer">
           <label for="content">本文</label>
-          <b-form-textarea
+          <textarea
             :value="content"
-            @change="onChangeForm('content', value, chapterIdx)"
+            @change="onChangeForm('content', $event.target.value, chapterIdx)"
             class="form-control"
             name="content"
             rows="10"
