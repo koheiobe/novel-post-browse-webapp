@@ -109,10 +109,18 @@ export default {
         return
       }
       // TODO 一時的にコメントアウト
-      // if (this.loginUserNovels.length >= 3) {
-      //   this.errors.push('小説の投稿数は３つまでです')
-      //   return
-      // }
+      if (this.loginUserNovels.length >= 3) {
+        this.errors.push('小説の投稿数は３つまでです')
+        return
+      }
+      if (this.title === '') {
+        this.errors.push('タイトルを入力してください')
+        return
+      }
+      if (this.description === '') {
+        this.errors.push('説明文を入力してください')
+        return
+      }
       const novelId = `${this.loginUser.email}-${this.title}`
       const novelRef = db.getNovel(novelId)
       const novel = await novelRef.get()
