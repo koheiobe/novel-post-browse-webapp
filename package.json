@@ -44,6 +44,6 @@
     "husky": "^2.6.0",
     "lint-staged": "^8.2.1",
     "prettier": "^1.16.4",
-    "stylelint": "^10.1.0"
+    "stylelint": "^15.10.1"
   }
 }
